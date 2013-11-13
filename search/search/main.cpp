@@ -1,12 +1,6 @@
 
 #include <iostream>
-#include <regex>
-#include <fstream>
-#include <utility>
-#include <future>
 
-#include "boost\filesystem.hpp"
-#include "boost\pool\pool_alloc.hpp"
 #include "InputOutput.hpp"
 #include "search_task.hpp"
 

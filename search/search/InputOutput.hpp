@@ -1,10 +1,11 @@
 
-#ifndef MAIN_HPP
-#define MAIN_HPP
+#ifndef INPUT_OUTPUT_HPP
+#define INPUT_OUTPUT_HPP
 
 #include <string>
 #include <mutex>
 #include <vector>
+#include <utility>
 #include "boost\filesystem.hpp"
 #include "boost\pool\pool_alloc.hpp"
 
@@ -26,4 +27,4 @@ struct Output
 	std::vector< string_pool > fileOpenError;
 };
 
-#endif //!MAIN_HPP
+#endif //!INPUT_OUTPUT_HPP

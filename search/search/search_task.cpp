@@ -1,5 +1,6 @@
 
 #include <future>
+#include <iostream>
 #include "search_task.hpp"
 
 search_task::search_task(const Input& input)
