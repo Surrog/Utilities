@@ -41,6 +41,7 @@ void search_task::search_file(const boost::filesystem::path& path)
 		std::ifstream stream(path.string());
 		if (stream.good())
 		{
+			stream.sync_with_stdio(false);
 			string_pool buffer;
 			buffer.reserve(128);
 			std::vector< pair_stringpool_int, boost::pool_allocator< pair_stringpool_int > > result_search;
