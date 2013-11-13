@@ -6,6 +6,7 @@
 #include <mutex>
 #include <vector>
 #include "boost\filesystem.hpp"
+#include "boost\pool\pool_alloc.hpp"
 
 typedef std::basic_string<char, std::char_traits<char>, boost::pool_allocator<char>> string_pool;
 typedef std::pair<string_pool, int> pair_stringpool_int;
@@ -24,11 +25,5 @@ struct Output
 	std::mutex coutLock;
 	std::vector< string_pool > fileOpenError;
 };
-
-template<typename T, typename Y>
-bool find(const T& in, const Y& value)
-{
-	return in.find(value.c_str()) != T::npos;
-}
 
 #endif //!MAIN_HPP
