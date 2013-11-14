@@ -65,6 +65,7 @@ void search_task::search_file(const boost::filesystem::path& path)
 		}
 		else // open file error
 		{
+			std::lock_guard<std::mutex> g(_output.coutLock);
 			_output.fileOpenError.push_back(output_path(path));
 		}
 	}
@@ -101,4 +102,6 @@ void search_task::search(boost::filesystem::path path, bool recurcive)
 		std::async(&search_task::search_file, this, path).wait();
 	}
 }
+
+
 

@@ -55,10 +55,11 @@ int main(int argc, char** argv)
 
 	if (!result)
 	{
-		std::cout << "search " << input.regex << " in " << input.root << std::endl;
+		std::cout << "search \"" << input.regex << std::endl;
+		std::cout << "target " << input.root << std::endl;
 		std::cout << "recursive " << input.recursive << std::endl;
-		std::cout << "include directory name " << input.directoryName << std::endl;
-		std::cout << "search in file content " << input.content << std::endl;
+		std::cout << "directory name " << input.directoryName << std::endl;
+		std::cout << "file content " << input.content << std::endl << std::endl;
 		search_task task(input);
 		task.do_search();
 		for (auto error : task.getOutput().fileOpenError)
@@ -72,3 +73,4 @@ int main(int argc, char** argv)
 	}
 	return result;
 }
+

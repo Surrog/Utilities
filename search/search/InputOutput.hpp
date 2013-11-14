@@ -28,3 +28,4 @@ struct Output
 };
 
 #endif //!INPUT_OUTPUT_HPP
+

@@ -68,6 +68,5 @@ public:
 	}
 };
 
-
-
 #endif //!SEARCH_TASK_HPP
+
