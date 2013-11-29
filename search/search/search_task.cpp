@@ -49,6 +49,9 @@ void search_task::search_file(const boost::filesystem::path &path) {
 	std::cout << output_path(path).c_str() << "\r\n";
   }
 
+  if (_input.filterfilename && !find(path.leaf().string(), _input.filterEx))
+	  return;
+
   if (_input.content) // search in content
   {
 	  auto result = search_content(path, _input.regex);
@@ -67,6 +70,9 @@ void search_task::search_directory(const boost::filesystem::path &path) {
     std::lock_guard<std::mutex> g(_output.coutLock);
 	std::cout << output_path(path) << "\r\n";
   }
+
+  if (_input.filterdirectoryName && !find(path.leaf().string(), _input.filterEx))
+	  return;
 
   std::vector<std::future<void> > directory_finished;
   std::for_each(

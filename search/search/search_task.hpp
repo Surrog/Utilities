@@ -25,7 +25,7 @@ public:
   void search(boost::filesystem::path path, bool recurcive);
 
   std::vector<pair_stringpool_int,
-	  boost::pool_allocator<pair_stringpool_int> > search_content(const boost::filesystem::path &path, const std::string& regex);
+	  boost::pool_allocator<pair_stringpool_int> > static search_content(const boost::filesystem::path &path, const std::string& regex);
 
 
   template <typename T, typename Y> static bool find(const T &input, const Y &value) {
