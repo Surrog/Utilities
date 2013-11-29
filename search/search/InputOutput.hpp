@@ -15,15 +15,21 @@ typedef std::pair<string_pool, int> pair_stringpool_int;
 
 struct Input {
   boost::filesystem::path root = boost::filesystem::current_path();
+
   std::string regex;
   bool recursive = false;
   bool content = false;
+  bool filename = false;
   bool directoryName = false;
+
+  std::string filterEx;
+  bool filterfilename = false;
+  bool filterfilecontent = false;
+  bool filterdirectoryName = false;
 };
 
 struct Output {
   std::mutex coutLock;
-  std::vector<string_pool> fileOpenError;
 };
 
 #endif //!INPUT_OUTPUT_HPP
