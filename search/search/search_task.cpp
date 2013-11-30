@@ -19,7 +19,7 @@ string_pool search_task::output_path(const boost::filesystem::path &input) {
 }
 
 void search_task::search_file(const boost::filesystem::path &path) {
-  if (find(path.leaf().string(), _input.regex)) // search on name
+	if (find(path.filename().native(), _input.regex)) // search on name
   {
     std::lock_guard<std::mutex> g(_output.coutLock);
     std::cout << output_path(path).c_str() << std::endl;
@@ -27,7 +27,7 @@ void search_task::search_file(const boost::filesystem::path &path) {
 
   if (_input.content) // search in content
   {
-    std::ifstream stream(path.string());
+    std::ifstream stream(path.c_str());
     if (stream.good()) {
       stream.sync_with_stdio(false);
       string_pool buffer;
