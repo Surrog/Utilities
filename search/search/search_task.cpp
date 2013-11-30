@@ -43,7 +43,11 @@ std::vector<pair_stringpool_int,
 }
 
 void search_task::search_file(const boost::filesystem::path &path) {
+<<<<<<< HEAD
 	if (find(path.filename().native(), _input.regex)) // search on name
+=======
+  if (_input.filename && find(path.leaf().string(), _input.regex)) // search on name
+>>>>>>> 41b91f7080b3a9cbb3f40f2fed015a42d35abd92
   {
     std::lock_guard<std::mutex> g(_output.coutLock);
 	std::cout << output_path(path).c_str() << "\r\n";
