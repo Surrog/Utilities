@@ -91,9 +91,13 @@ void search_task::search_directory(const boost::filesystem::path &path) {
 
 void search_task::search(boost::filesystem::path path, bool recurcive) {
   boost::system::error_code error;
-  if (recurcive && boost::filesystem::is_directory(path, error) && !error) {
-    std::async(&search_task::search_directory, this, path).wait();
-  } else if (boost::filesystem::is_regular_file(path, error) && !error) {
-    std::async(&search_task::search_file, this, path).wait();
+  auto stat = boost::filesystem::status(path, error);
+  if (!error) {
+    auto type = stat.type();
+    if (recurcive && type == boost::filesystem::file_type::directory_file) {
+      std::async(&search_task::search_directory, this, std::move(path)).wait();
+    } else if (type == boost::filesystem::file_type::regular_file) {
+      std::async(&search_task::search_file, this, std::move(path)).wait();
+    }
   }
 }
