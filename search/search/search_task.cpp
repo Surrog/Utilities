@@ -23,7 +23,7 @@ search_task::search_content(const boost::filesystem::path &path,
                             const std::string &regex) {
   std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
   result;
-  std::ifstream stream(path.string());
+  std::ifstream stream(path.c_str());
   if (stream.good()) {
     stream.sync_with_stdio(false);
     string_pool buffer;
