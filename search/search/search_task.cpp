@@ -18,61 +18,62 @@ string_pool search_task::output_path(const boost::filesystem::path &input) {
   return result;
 }
 
-std::vector<pair_stringpool_int,
-	boost::pool_allocator<pair_stringpool_int> > search_task::search_content(const boost::filesystem::path &path, const std::string& regex)
-{
-	std::vector<pair_stringpool_int,
-		boost::pool_allocator<pair_stringpool_int> > result;
-	std::ifstream stream(path.string());
-	if (stream.good()) {
-		stream.sync_with_stdio(false);
-		string_pool buffer;
-		buffer.reserve(128);
-		int line = 0;
-		while (std::getline(stream, buffer)) {
-			if (find(buffer, regex))
-			{
-				int size = buffer.size();
-				result.push_back(std::make_pair(std::move(buffer), line));
-				buffer.reserve(size);
-			}
-			line++;
-		}
-	}
-	return result;
+std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
+search_task::search_content(const boost::filesystem::path &path,
+                            const std::string &regex) {
+  std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
+  result;
+  std::ifstream stream(path.string());
+  if (stream.good()) {
+    stream.sync_with_stdio(false);
+    string_pool buffer;
+    buffer.reserve(128);
+    int line = 0;
+    while (std::getline(stream, buffer)) {
+      if (find(buffer, regex)) {
+        int size = buffer.size();
+        result.push_back(std::make_pair(std::move(buffer), line));
+        buffer.reserve(size);
+      }
+      line++;
+    }
+  }
+  return result;
 }
 
 void search_task::search_file(const boost::filesystem::path &path) {
-	if (_input.filename && find(path.filename().native(), _input.regex)) // search on name
+  if (_input.filename &&
+      find(path.filename().native(), _input.regex)) // search on name
   {
     std::lock_guard<std::mutex> g(_output.coutLock);
-	std::cout << output_path(path).c_str() << "\r\n";
+    std::cout << output_path(path).c_str() << "\r\n";
   }
 
   if (_input.filterfilename && !find(path.leaf().string(), _input.filterEx))
-	  return;
+    return;
 
   if (_input.content) // search in content
   {
-	  auto result = search_content(path, _input.regex);
-	  if (result.size()) {
-		  std::lock_guard<std::mutex> g(_output.coutLock);
-		  std::cout << output_path(path) << "\r\n";
-		  for (auto pair : result) {
-			  std::cout << "line " << pair.second << " : " << pair.first << "\r\n";
-		  }
-	  }
+    auto result = search_content(path, _input.regex);
+    if (result.size()) {
+      std::lock_guard<std::mutex> g(_output.coutLock);
+      std::cout << output_path(path) << "\r\n";
+      for (auto pair : result) {
+        std::cout << "line " << pair.second << " : " << pair.first << "\r\n";
+      }
+    }
   }
 }
 
 void search_task::search_directory(const boost::filesystem::path &path) {
   if (_input.directoryName && find(path.leaf().string(), _input.regex)) {
     std::lock_guard<std::mutex> g(_output.coutLock);
-	std::cout << output_path(path) << "\r\n";
+    std::cout << output_path(path) << "\r\n";
   }
 
-  if (_input.filterdirectoryName && !find(path.leaf().string(), _input.filterEx))
-	  return;
+  if (_input.filterdirectoryName &&
+      !find(path.leaf().string(), _input.filterEx))
+    return;
 
   std::vector<std::future<void> > directory_finished;
   std::for_each(
