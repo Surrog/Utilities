@@ -5,7 +5,7 @@
 
 search_task::search_task(const Input &input) : _input(input), _output() {}
 
-void search_task::do_search() { search(_input.root, true); }
+void search_task::do_search() { search(_input.root, true).wait(); }
 
 const Output &search_task::getOutput() { return _output; }
 
@@ -75,13 +75,15 @@ void search_task::search_directory(const boost::filesystem::path &path) {
       !find(path.leaf().string(), _input.filterEx))
     return;
 
-  std::vector<std::future<void> > directory_finished;
+  std::vector< std::future<void> > directory_finished;
   std::for_each(
       boost::filesystem::directory_iterator(path),
       boost::filesystem::directory_iterator(),
       [this, &directory_finished](const boost::filesystem::path &subpath) {
-        directory_finished.push_back(
-            std::async(&search_task::search, this, subpath, _input.recursive));
+	  
+	  directory_finished.push_back(
+		  search(std::move(subpath), _input.recursive));
+			//std::async(&search_task::search, this, subpath, _input.recursive));
       });
   for (auto &future : directory_finished) {
     future.wait();
@@ -89,15 +91,17 @@ void search_task::search_directory(const boost::filesystem::path &path) {
   std::cout.flush();
 }
 
-void search_task::search(boost::filesystem::path path, bool recurcive) {
-  boost::system::error_code error;
-  auto stat = boost::filesystem::status(path, error);
-  if (!error) {
-    auto type = stat.type();
-    if (recurcive && type == boost::filesystem::file_type::directory_file) {
-      std::async(&search_task::search_directory, this, std::move(path)).wait();
-    } else if (type == boost::filesystem::file_type::regular_file) {
-      std::async(&search_task::search_file, this, std::move(path)).wait();
-    }
-  }
+std::future< void > search_task::search(boost::filesystem::path path, bool recurcive) {
+	boost::system::error_code error;
+	auto stat = boost::filesystem::status(path, error);
+	if (!error) {
+		auto type = stat.type();
+		if (recurcive && type == boost::filesystem::file_type::directory_file) {
+			return std::async(&search_task::search_directory, this, std::move(path));
+		}
+		else if (type == boost::filesystem::file_type::regular_file) {
+			return std::async(&search_task::search_file, this, std::move(path));
+		}
+	}
+	return std::async([](){});
 }

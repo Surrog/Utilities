@@ -4,6 +4,8 @@
 #include "boost\filesystem.hpp"
 #include "InputOutput.hpp"
 
+#include <future>
+
 struct search_task {
 private:
   const Input &_input;
@@ -22,7 +24,7 @@ public:
 
   void search_directory(const boost::filesystem::path &path);
 
-  void search(boost::filesystem::path path, bool recurcive);
+  std::future< void > search(boost::filesystem::path path, bool recurcive);
 
   std::vector<
       pair_stringpool_int,
