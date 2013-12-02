@@ -86,7 +86,7 @@ search_task::search_directory(const boost::filesystem::path &path) {
   if (!error) {
     std::for_each(begin, end, [this, &directory_finished](
                                   const boost::filesystem::path &subpath) {
-      directory_finished.push_back(search(std::move(subpath)));
+      directory_finished.push_back(search(std::move(subpath), _input.recursive));
     });
 
     for (auto &future : directory_finished) {
@@ -100,23 +100,6 @@ search_task::search_directory(const boost::filesystem::path &path) {
     return wsstreampool();
   }
   return result;
-}
-
-std::future<wsstreampool> search_task::search(boost::filesystem::path path) {
-  boost::system::error_code error;
-  auto stat = boost::filesystem::status(path, error);
-  if (!error) {
-    auto type = stat.type();
-    if (_input.recursive &&
-        type == boost::filesystem::file_type::directory_file) {
-      return std::async(
-          thread_task(&search_task::search_directory, this, std::move(path)));
-    } else if (type == boost::filesystem::file_type::regular_file) {
-      return std::async(
-          thread_task(&search_task::search_file, this, std::move(path)));
-    }
-  }
-  return std::async([]() { return wsstreampool(); });
 }
 
 std::future<wsstreampool> search_task::search(boost::filesystem::path path,
