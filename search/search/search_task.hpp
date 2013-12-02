@@ -25,6 +25,7 @@ public:
   void search_directory(const boost::filesystem::path &path);
 
   std::future< void > search(boost::filesystem::path path, bool recurcive);
+  std::future< void > search(boost::filesystem::path path);
 
   std::vector<
       pair_stringpool_int,

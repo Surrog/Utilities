@@ -80,15 +80,28 @@ void search_task::search_directory(const boost::filesystem::path &path) {
       boost::filesystem::directory_iterator(path),
       boost::filesystem::directory_iterator(),
       [this, &directory_finished](const boost::filesystem::path &subpath) {
-	  
 	  directory_finished.push_back(
-		  search(std::move(subpath), _input.recursive));
-			//std::async(&search_task::search, this, subpath, _input.recursive));
+		  search(std::move(subpath)));
       });
   for (auto &future : directory_finished) {
     future.wait();
   }
   std::cout.flush();
+}
+
+std::future< void > search_task::search(boost::filesystem::path path) {
+	boost::system::error_code error;
+	auto stat = boost::filesystem::status(path, error);
+	if (!error) {
+		auto type = stat.type();
+		if (_input.recursive && type == boost::filesystem::file_type::directory_file) {
+			return std::async(&search_task::search_directory, this, std::move(path));
+		}
+		else if (type == boost::filesystem::file_type::regular_file) {
+			return std::async(&search_task::search_file, this, std::move(path));
+		}
+	}
+	return std::async([](){});
 }
 
 std::future< void > search_task::search(boost::filesystem::path path, bool recurcive) {
