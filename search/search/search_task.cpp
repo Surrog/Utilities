@@ -72,7 +72,7 @@ wsstreampool search_task::search_directory(const boost::filesystem::path &path) 
       !find(path.leaf().string(), _input.filterEx))
     return result;
 
-  std::vector< std::pair< std::future<wsstreampool>, bool >> directory_finished; // explore every file in it
+  std::vector< std::future<wsstreampool>> directory_finished; // explore every file in it
   boost::system::error_code error;
   auto begin = boost::filesystem::directory_iterator(path, error);
   auto end = boost::filesystem::directory_iterator();
@@ -81,11 +81,11 @@ wsstreampool search_task::search_directory(const boost::filesystem::path &path) 
 	  std::for_each(begin, end,
 		  [this, &directory_finished](const boost::filesystem::path &subpath) {
 		  directory_finished.push_back(
-			  make_pair(search(std::move(subpath)), false));
+			  search(std::move(subpath)));
 	  });
 
-	  for (auto &pair : directory_finished) {
-		  result << pair.first.get().str();
+	  for (auto &future : directory_finished) {
+		  result << future.get().str();
 	  }
   }
   std::unique_lock<std::mutex> g(_output.coutLock, std::defer_lock);
