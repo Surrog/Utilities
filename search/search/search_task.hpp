@@ -12,6 +12,26 @@ private:
   const Input &_input;
   Output _output;
 
+  struct thread_task
+  {
+	  typedef wsstreampool (search_task::*func_ptr)(const boost::filesystem::path&);
+
+	  func_ptr _function;
+	  search_task* _instance;
+	  boost::filesystem::path _path;
+
+	  thread_task(func_ptr function, search_task* instance, boost::filesystem::path path)
+		  : _function(function), _instance(instance), _path(path)
+	  {
+		  
+	  }
+
+	  wsstreampool operator()()
+	  {
+		  return (_instance->*_function)(_path);
+	  }
+  };
+
 public:
   search_task(const Input &input);
 
