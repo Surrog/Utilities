@@ -15,11 +15,11 @@ typedef std::basic_string<char, std::char_traits<char>,
 typedef std::pair<string_pool, int> pair_stringpool_int;
 
 typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
-	boost::pool_allocator<wchar_t> > wstring_pool;
+                          boost::pool_allocator<wchar_t> > wstring_pool;
 typedef std::pair<wstring_pool, int> pair_wstringpool_int;
 
-typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>, 
-	boost::pool_allocator<wchar_t>> wsstreampool;
+typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
+                                boost::pool_allocator<wchar_t> > wsstreampool;
 
 struct Input {
   boost::filesystem::path root = boost::filesystem::current_path();
