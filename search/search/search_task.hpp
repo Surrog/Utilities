@@ -12,24 +12,19 @@ private:
   const Input &_input;
   Output _output;
 
-  struct thread_task
-  {
-	  typedef wsstreampool (search_task::*func_ptr)(const boost::filesystem::path&);
+  struct thread_task {
+    typedef wsstreampool (search_task::*func_ptr)(
+        const boost::filesystem::path &);
 
-	  func_ptr _function;
-	  search_task* _instance;
-	  boost::filesystem::path _path;
+    func_ptr _function;
+    search_task *_instance;
+    boost::filesystem::path _path;
 
-	  thread_task(func_ptr function, search_task* instance, boost::filesystem::path path)
-		  : _function(function), _instance(instance), _path(path)
-	  {
-		  
-	  }
+    thread_task(func_ptr function, search_task *instance,
+                boost::filesystem::path path)
+        : _function(function), _instance(instance), _path(path) {}
 
-	  wsstreampool operator()()
-	  {
-		  return (_instance->*_function)(_path);
-	  }
+    wsstreampool operator()() { return (_instance->*_function)(_path); }
   };
 
 public:
@@ -46,9 +41,14 @@ public:
   std::future<wsstreampool> search(boost::filesystem::path path,
                                    bool recurcive);
 
-  std::vector<pair_wstringpool_int, boost::pool_allocator<pair_wstringpool_int> > 
-  static search_content(const boost::filesystem::path & path, 
-							const std::string & regex);
+  std::vector<
+      pair_wstringpool_int,
+      boost::pool_allocator<
+          pair_wstringpool_int> > static search_content(const boost::
+                                                            filesystem::path &
+                                                                path,
+                                                        const std::string &
+                                                            regex);
 
   template <typename T, typename Y>
   static bool find(const T &input, const Y &value) {
@@ -100,33 +100,25 @@ public:
     output_line(input.native(), stream);
   }
 
-  bool has_extension(const boost::filesystem::path& path)
-  {
-	  return has_extension(path.native());
+  bool has_extension(const boost::filesystem::path &path) {
+    return has_extension(path.native());
   }
 
   template <typename T, typename Alloc>
-  bool has_extension(const std::basic_string<T, std::char_traits<T>, Alloc> & char_array)
-  {
-	  for (const T& char_value : char_array)
-	  {
-		  if (char_value == static_cast<T>('.'))
-			  return true;
-	  }
-	  return false;
+  bool has_extension(
+      const std::basic_string<T, std::char_traits<T>, Alloc> &char_array) {
+    for (const T &char_value : char_array) {
+      if (char_value == static_cast<T>('.'))
+        return true;
+    }
+    return false;
   }
 
-  template <typename T>
-  int stat(const T* path, _stat& buf)
-  {
-	  return _stat(path, &buf);
+  template <typename T> int stat(const T *path, _stat &buf) {
+    return _stat(path, &buf);
   }
 
-  int stat(const wchar_t* path, _stat& buf)
-  {
-	  return _wstat(path, &buf);
-  }
-
+  int stat(const wchar_t *path, _stat &buf) { return _wstat(path, &buf); }
 };
 
 #endif //!SEARCH_TASK_HPP

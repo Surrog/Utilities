@@ -87,7 +87,8 @@ search_task::search_directory(const boost::filesystem::path &path) {
   if (!error) {
     std::for_each(begin, end, [this, &directory_finished](
                                   const boost::filesystem::path &subpath) {
-      directory_finished.push_back(search(std::move(subpath), _input.recursive));
+      directory_finished.push_back(
+          search(std::move(subpath), _input.recursive));
     });
 
     for (auto &future : directory_finished) {
@@ -107,18 +108,15 @@ std::future<wsstreampool> search_task::search(boost::filesystem::path path,
                                               bool recurcive) {
   struct _stat buf;
   int result = stat(path.c_str(), buf);
-  
-  if (result == 0)
-  {
-	  if (recurcive && (buf.st_mode & _S_IFDIR))
-	  {
-		  return std::async(
-			  thread_task(&search_task::search_directory, this, std::move(path)));
-	  } else if (buf.st_mode & _S_IFREG)
-	  {
-		  return std::async(
-			  thread_task(&search_task::search_file, this, std::move(path)));
-	  }
+
+  if (result == 0) {
+    if (recurcive && (buf.st_mode & _S_IFDIR)) {
+      return std::async(
+          thread_task(&search_task::search_directory, this, std::move(path)));
+    } else if (buf.st_mode & _S_IFREG) {
+      return std::async(
+          thread_task(&search_task::search_file, this, std::move(path)));
+    }
   }
 
   return std::async([]() { return wsstreampool(); });
