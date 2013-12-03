@@ -2,6 +2,7 @@
 #include <future>
 #include <iostream>
 #include "search_task.hpp"
+#include <sys/stat.h>
 
 search_task::search_task(const Input &input) : _input(input), _output() {}
 
@@ -104,17 +105,21 @@ search_task::search_directory(const boost::filesystem::path &path) {
 
 std::future<wsstreampool> search_task::search(boost::filesystem::path path,
                                               bool recurcive) {
-  boost::system::error_code error;
-  auto stat = boost::filesystem::status(path, error);
-  if (!error) {
-    auto type = stat.type();
-    if (recurcive && type == boost::filesystem::file_type::directory_file) {
-      return std::async(
-          thread_task(&search_task::search_directory, this, std::move(path)));
-    } else if (type == boost::filesystem::file_type::regular_file) {
-      return std::async(
-          thread_task(&search_task::search_file, this, std::move(path)));
-    }
+  struct _stat buf;
+  int result = stat(path.c_str(), buf);
+  
+  if (result == 0)
+  {
+	  if (recurcive && (buf.st_mode & _S_IFDIR))
+	  {
+		  return std::async(
+			  thread_task(&search_task::search_directory, this, std::move(path)));
+	  } else if (buf.st_mode & _S_IFREG)
+	  {
+		  return std::async(
+			  thread_task(&search_task::search_file, this, std::move(path)));
+	  }
   }
+
   return std::async([]() { return wsstreampool(); });
 }

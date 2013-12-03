@@ -80,8 +80,11 @@ int main(int argc, char **argv) {
     /*std::cout << "filter on file content " << input.filterfilecontent <<
      * std::endl;*/
     std::cout << std::endl;
-    search_task task(input);
+	auto start = std::chrono::system_clock::now();
+	search_task task(input);
     task.do_search();
+	std::cout << "execution time: " << std::chrono::duration_cast<std::chrono::milliseconds>
+		(std::chrono::system_clock::now() - start).count() << " ms" << std::endl;
   } else {
     std::cout << "search [-rcnd] [-t root_path] [-f[nd] filter_regex] regex\r\n"
                  "-n search in filename\r\n"

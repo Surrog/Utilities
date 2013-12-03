@@ -121,6 +121,18 @@ public:
 	  }
 	  return false;
   }
+
+  template <typename T>
+  int stat(const T* path, _stat& buf)
+  {
+	  return _stat(path, &buf);
+  }
+
+  int stat(const wchar_t* path, _stat& buf)
+  {
+	  return _wstat(path, &buf);
+  }
+
 };
 
 #endif //!SEARCH_TASK_HPP
