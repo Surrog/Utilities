@@ -93,11 +93,6 @@ public:
     stream << value << "\r\n";
   }
 
-  void output_line(const wchar_t *const &value,
-                   std::wostream &stream = std::wcout) {
-    stream << value << "\r\n";
-  }
-
   template <typename T>
   void output_line(
       const std::basic_string<wchar_t, std::char_traits<wchar_t>, T> &value,
@@ -108,7 +103,23 @@ public:
   template <typename T>
   void output_line(const boost::filesystem::path &input,
                    std::basic_ostream<T> &stream) {
-    output_line(input.c_str(), stream);
+    output_line(input.native(), stream);
+  }
+
+  bool has_extension(const boost::filesystem::path& path)
+  {
+	  return has_extension(path.native());
+  }
+
+  template <typename T, typename Alloc>
+  bool has_extension(const std::basic_string<T, std::char_traits<T>, Alloc> & char_array)
+  {
+	  for (const T& char_value : char_array)
+	  {
+		  if (char_value == static_cast<T>('.'))
+			  return true;
+	  }
+	  return false;
   }
 };
 
