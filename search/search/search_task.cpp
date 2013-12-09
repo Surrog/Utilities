@@ -16,7 +16,7 @@ const Output &search_task::getOutput() { return _output; }
 
 std::vector<pair_wstringpool_int, boost::pool_allocator<pair_wstringpool_int> >
 search_task::search_content(const boost::filesystem::path &path,
-                            const std::string &regex) {
+                            const std::wstring &regex) {
   std::vector<pair_wstringpool_int,
               boost::pool_allocator<pair_wstringpool_int> > result;
   std::ifstream stream(path.c_str());
@@ -43,10 +43,14 @@ search_task::search_content(const boost::filesystem::path &path,
 
 wsstreampool search_task::search_file(const boost::filesystem::path &path) {
   wsstreampool result;
+  if (_input.filterdirectoryName && 
+	  !find(path.parent_path().native(), _input.filterEx))
+	  return result;
+  
   if (_input.filename &&
       find(path.filename().native(), _input.regex)) // search on name
   {
-    output_line(path, result);
+	output_line(path, result);
   }
 
   if (_input.filterfilename &&
@@ -68,16 +72,23 @@ wsstreampool search_task::search_file(const boost::filesystem::path &path) {
 }
 
 wsstreampool
-search_task::search_directory(const boost::filesystem::path &path) {
-  wsstreampool result;
-  if (_input.directoryName &&
-      find(path.leaf().string(), _input.regex)) { // check directory name
-    output_line(path, result);
-  }
+search_task::match_directory(const boost::filesystem::path &path) {
+	wsstreampool result;
 
-  if (_input.filterdirectoryName && // directory filter
-      !find(path.leaf().string(), _input.filterEx))
-    return result;
+	if (_input.filterdirectoryName &&
+		!find(path.native(), _input.filterEx)) // filter by path
+		return result;
+
+	if (_input.directoryName &&
+		find(path.leaf().native(), _input.regex)) { // check directory name
+		output_line(path, result);
+	}
+	return result;
+}
+
+wsstreampool
+search_task::search_directory(const boost::filesystem::path &path) {
+  wsstreampool result = match_directory(path);
 
   std::vector<std::future<wsstreampool> > directory_finished; // explore every
                                                               // file in it

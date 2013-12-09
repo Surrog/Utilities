@@ -24,13 +24,13 @@ typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
 struct Input {
   boost::filesystem::path root = boost::filesystem::current_path();
 
-  std::string regex;
+  std::wstring regex;
   bool recursive = false;
   bool content = false;
   bool filename = false;
   bool directoryName = false;
 
-  std::string filterEx;
+  std::wstring filterEx;
   bool filterfilename = false;
   bool filterfilecontent = false;
   bool filterdirectoryName = false;

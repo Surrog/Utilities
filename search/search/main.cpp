@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
   std::cout.sync_with_stdio(false);
   std::wcout.sync_with_stdio(false);
   Input input;
-  std::string regexValue;
+  std::wstring regexValue;
   int result = 0;
 
   for (int i = 1; i < argc; i++) {
@@ -22,7 +22,8 @@ int main(int argc, char **argv) {
 
         i++;
         if (i < argc) {
-          input.filterEx = argv[i];
+			std::string buffer(argv[i]);
+          input.filterEx = std::wstring(buffer.begin(), buffer.end());
         } else {
           std::cout << "error : filter not found";
           result = 1;
@@ -50,7 +51,7 @@ int main(int argc, char **argv) {
       }
 
     } else {
-      regexValue = std::move(arg);
+      regexValue = std::wstring(arg.begin(), arg.end());
     }
   }
 
@@ -65,7 +66,7 @@ int main(int argc, char **argv) {
   input.regex = regexValue;
 
   if (!result) {
-    std::cout << "search \"" << input.regex << "\"" << std::endl;
+    std::wcout << "search \"" << input.regex << "\"" << std::endl;
     std::cout << "target " << input.root << std::endl;
     std::cout << "recursive " << input.recursive << std::endl;
     std::cout << "filename " << input.filename << std::endl;
@@ -73,7 +74,7 @@ int main(int argc, char **argv) {
     std::cout << "file content " << input.content << std::endl;
     if (input.filterfilename || input.filterdirectoryName ||
         input.filterfilecontent)
-      std::cout << "filter \"" << input.filterEx << "\"" << std::endl;
+      std::wcout << "filter \"" << input.filterEx << "\"" << std::endl;
     std::cout << "filter on filename " << input.filterfilename << std::endl;
     std::cout << "filter on directory name " << input.filterdirectoryName
               << std::endl;
@@ -98,5 +99,6 @@ int main(int argc, char **argv) {
                  "or content search";
     std::cout.flush();
   }
+  std::cin.get();
   return result;
 }
