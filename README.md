@@ -11,4 +11,4 @@ Allow a quick query on different criteria, using basic wildcard :
 	-d search in directory name
 	-r recurse on sub directory
 	-t followed by a path, set the search location
-	-f [nd] followed by a pattern: will cut short the recursion or content search
+	-f [nd] followed by a pattern: will filter by directory or filter the name where the content is searched.
