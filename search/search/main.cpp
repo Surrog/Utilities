@@ -99,6 +99,5 @@ int main(int argc, char **argv) {
                  "or content search";
     std::cout.flush();
   }
-  std::cin.get();
   return result;
 }
