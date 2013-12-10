@@ -43,14 +43,8 @@ public:
   std::future<wsstreampool> search(boost::filesystem::path path,
                                    bool recurcive);
 
-  std::vector<
-      pair_wstringpool_int,
-      boost::pool_allocator<
-          pair_wstringpool_int> > static search_content(const boost::
-                                                            filesystem::path &
-                                                                path,
-                                                        const std::wstring &
-                                                            regex);
+  std::vector<pair_wstringpool_int, boost::pool_allocator< pair_wstringpool_int> > 
+  search_content(const boost::filesystem::path & path) const;
 
   template <typename T, typename Y>
   static bool find(const T &input, const Y &value, int& input_it, int value_it) {

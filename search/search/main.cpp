@@ -19,7 +19,8 @@ int main(int argc, char **argv) {
           input.filterfilename = true;
         if (arg[2] == 'd')
           input.filterdirectoryName = true;
-
+		if (arg[2] == 'c')
+		  input.filterfilecontent = true;
         i++;
         if (i < argc) {
 			std::string buffer(argv[i]);
@@ -78,8 +79,7 @@ int main(int argc, char **argv) {
     std::cout << "filter on filename " << input.filterfilename << std::endl;
     std::cout << "filter on directory name " << input.filterdirectoryName
               << std::endl;
-    /*std::cout << "filter on file content " << input.filterfilecontent <<
-     * std::endl;*/
+    std::cout << "filter on file content " << input.filterfilecontent << std::endl;
     std::cout << std::endl;
     auto start = std::chrono::system_clock::now();
     search_task task(input);
@@ -95,8 +95,8 @@ int main(int argc, char **argv) {
                  "-d search in directory name\t\n"
                  "-r recurse on sub directory\r\n"
                  "-t followed by a path, set the search location\r\n"
-                 "-f [nd] followed by a pattern: will cut short the recursion "
-                 "or content search";
+                 "-f [ndc] followed by a pattern: will filter by directory / "
+                 "filter the file name where the content is searched or the file content";
     std::cout.flush();
   }
   return result;

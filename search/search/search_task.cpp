@@ -15,11 +15,11 @@ void search_task::do_search() {
 const Output &search_task::getOutput() { return _output; }
 
 std::vector<pair_wstringpool_int, boost::pool_allocator<pair_wstringpool_int> >
-search_task::search_content(const boost::filesystem::path &path,
-                            const std::wstring &regex) {
+search_task::search_content(const boost::filesystem::path &path) const {
   std::vector<pair_wstringpool_int,
               boost::pool_allocator<pair_wstringpool_int> > result;
   std::ifstream stream(path.c_str());
+  bool filter_found = !_input.filterfilecontent;
   if (stream.good()) {
 
     stream.sync_with_stdio(false); // allow threaded input
@@ -29,7 +29,10 @@ search_task::search_content(const boost::filesystem::path &path,
     int line = 0;
 
     while (std::getline(stream, buffer)) {
-      if (find(buffer, regex)) {
+		if (!filter_found && find(buffer, _input.filterEx)) {
+			filter_found = true;
+		}
+		if (find(buffer, _input.regex)) {
         int size = buffer.size();
         result.push_back(
             std::make_pair(wstring_pool(buffer.begin(), buffer.end()), line));
@@ -38,6 +41,9 @@ search_task::search_content(const boost::filesystem::path &path,
       line++;
     }
   }
+  if (!filter_found)
+	  return std::vector<	pair_wstringpool_int,
+							boost::pool_allocator<pair_wstringpool_int> >();
   return result;
 }
 
@@ -60,7 +66,7 @@ wsstreampool search_task::search_file(const boost::filesystem::path &path) {
   if (_input.content) // search in content
   {
     auto content_result =
-        search_content(path, _input.regex); // get every line matching
+        search_content(path); // get every line matching
     if (content_result.size()) {
       output_line(path, result);
       for (auto pair : content_result) {
