@@ -29,10 +29,10 @@ search_task::search_content(const boost::filesystem::path &path) const {
     int line = 0;
 
     while (std::getline(stream, buffer)) {
-		if (!filter_found && find(buffer, _input.filterEx)) {
-			filter_found = true;
-		}
-		if (find(buffer, _input.regex)) {
+      if (!filter_found && find(buffer, _input.filterEx)) {
+        filter_found = true;
+      }
+      if (find(buffer, _input.regex)) {
         int size = buffer.size();
         result.push_back(
             std::make_pair(wstring_pool(buffer.begin(), buffer.end()), line));
@@ -42,21 +42,21 @@ search_task::search_content(const boost::filesystem::path &path) const {
     }
   }
   if (!filter_found)
-	  return std::vector<	pair_wstringpool_int,
-							boost::pool_allocator<pair_wstringpool_int> >();
+    return std::vector<pair_wstringpool_int,
+                       boost::pool_allocator<pair_wstringpool_int> >();
   return result;
 }
 
 wsstreampool search_task::search_file(const boost::filesystem::path &path) {
   wsstreampool result;
-  if (_input.filterdirectoryName && 
-	  !find(path.parent_path().native(), _input.filterEx))
-	  return result;
-  
+  if (_input.filterdirectoryName &&
+      !find(path.parent_path().native(), _input.filterEx))
+    return result;
+
   if (_input.filename &&
       find(path.filename().native(), _input.regex)) // search on name
   {
-	output_line(path, result);
+    output_line(path, result);
   }
 
   if (_input.filterfilename &&
@@ -65,8 +65,7 @@ wsstreampool search_task::search_file(const boost::filesystem::path &path) {
 
   if (_input.content) // search in content
   {
-    auto content_result =
-        search_content(path); // get every line matching
+    auto content_result = search_content(path); // get every line matching
     if (content_result.size()) {
       output_line(path, result);
       for (auto pair : content_result) {
@@ -77,19 +76,18 @@ wsstreampool search_task::search_file(const boost::filesystem::path &path) {
   return result;
 }
 
-wsstreampool
-search_task::match_directory(const boost::filesystem::path &path) {
-	wsstreampool result;
+wsstreampool search_task::match_directory(const boost::filesystem::path &path) {
+  wsstreampool result;
 
-	if (_input.filterdirectoryName &&
-		!find(path.native(), _input.filterEx)) // filter by path
-		return result;
+  if (_input.filterdirectoryName &&
+      !find(path.native(), _input.filterEx)) // filter by path
+    return result;
 
-	if (_input.directoryName &&
-		find(path.leaf().native(), _input.regex)) { // check directory name
-		output_line(path, result);
-	}
-	return result;
+  if (_input.directoryName &&
+      find(path.leaf().native(), _input.regex)) { // check directory name
+    output_line(path, result);
+  }
+  return result;
 }
 
 wsstreampool

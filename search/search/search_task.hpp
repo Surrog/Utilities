@@ -43,45 +43,44 @@ public:
   std::future<wsstreampool> search(boost::filesystem::path path,
                                    bool recurcive);
 
-  std::vector<pair_wstringpool_int, boost::pool_allocator< pair_wstringpool_int> > 
-  search_content(const boost::filesystem::path & path) const;
+  std::vector<pair_wstringpool_int,
+              boost::pool_allocator<pair_wstringpool_int> >
+  search_content(const boost::filesystem::path &path) const;
 
   template <typename T, typename Y>
-  static bool find(const T &input, const Y &value, int& input_it, int value_it) {
-	  int input_size = input.size();
-	  int value_size = value.size();
+  static bool find(const T &input, const Y &value, int &input_it,
+                   int value_it) {
+    int input_size = input.size();
+    int value_size = value.size();
 
-	  while (input_it < input_size && value_it < value_size) {
-		  if (input[input_it] == value[value_it]) {
-			  input_it++;
-			  value_it++;
-		  }
-		  else if (value[value_it] == '*') {
-			  value_it++;
-			  if (value_it >= value_size)
-				  return true;
-			  while (input_it < input_size && value_it < value_size) {
-				  if (find(input, value, input_it, value_it))
-					  return true;
-				  input_it++;
-			  }
-		  }
-		  else
-		  {
-			  return false;
-		  }
-	  }
-	  while (value_it < value_size && value[value_it] == '*')
-		  value_it++;
+    while (input_it < input_size && value_it < value_size) {
+      if (input[input_it] == value[value_it]) {
+        input_it++;
+        value_it++;
+      } else if (value[value_it] == '*') {
+        value_it++;
+        if (value_it >= value_size)
+          return true;
+        while (input_it < input_size && value_it < value_size) {
+          if (find(input, value, input_it, value_it))
+            return true;
+          input_it++;
+        }
+      } else {
+        return false;
+      }
+    }
+    while (value_it < value_size && value[value_it] == '*')
+      value_it++;
 
-	  return value_it >= value_size && input_it >= input_size;
+    return value_it >= value_size && input_it >= input_size;
   }
 
   template <typename T, typename Y>
   static bool find(const T &input, const Y &value) {
-	  int input_it = 0;
-	  int value_it = 0;
-	  return find(input, value, input_it, value_it);
+    int input_it = 0;
+    int value_it = 0;
+    return find(input, value, input_it, value_it);
   }
 
   template <typename T>
