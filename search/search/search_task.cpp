@@ -67,8 +67,11 @@ wsstreampool search_task::search_file(const boost::filesystem::path &path) {
   {
     auto content_result = search_content(path); // get every line matching
     if (content_result.size()) {
-      output_line(path, result);
-      for (auto pair : content_result) {
+		output_line("\r\n==\r\n", result);
+		output_line(path, result);
+		output_line("==\r\n", result);
+
+		for (auto pair : content_result) {
         result << "line " << pair.second << " : " << pair.first << "\r\n";
       }
     }
