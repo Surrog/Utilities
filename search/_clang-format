@@ -1,0 +1,9 @@
+BasedOnStyle: WebKit
+IndentWidth: 3
+AllowShortBlocksOnASingleLine: true
+Cpp11BracedListStyle: true
+UseTab: Never
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 80
