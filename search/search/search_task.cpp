@@ -3,7 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include "search_task.hpp"
-#include "boost\filesystem\operations.hpp"
+#include "boost/filesystem/operations.hpp"
+#include <functional>
 
 search_task::search_task(const Input& input)
     : _input(input)
@@ -148,13 +149,11 @@ std::future<wsstreampool> search_task::search(
 
       if (recurcive && boost::filesystem::is_directory(st))
       {
-         return std::async(thread_task(
-             &search_task::search_directory, this, std::move(path)));
+         return std::async(std::bind(&search_task::search_directory, this, std::move(path)));
       }
       else if (boost::filesystem::is_regular_file(st))
       {
-         return std::async(
-             thread_task(&search_task::search_file, this, std::move(path)));
+         return std::async(std::bind(&search_task::search_file, this, std::move(path)));
       }
 
    return std::async([]()
