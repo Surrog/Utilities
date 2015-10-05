@@ -2,8 +2,8 @@
 #define SEARCH_TASK_HPP
 
 #include "InputOutput.hpp"
-#include "boost\filesystem/path.hpp"
-#include "boost\filesystem\operations.hpp"
+#include "boost/filesystem/path.hpp"
+#include "boost/filesystem/operations.hpp"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <future>
@@ -32,7 +32,7 @@ struct search_task
       {
       }
 
-      wsstreampool operator()() { return (_instance->*_function)(_path); }
+     wsstreampool operator()() { return std::move((_instance->*_function)(_path)); }
    };
 
    public:

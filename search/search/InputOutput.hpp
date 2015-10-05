@@ -6,9 +6,9 @@
 #include <mutex>
 #include <vector>
 #include <utility>
-#include "boost\filesystem/path.hpp"
-#include "boost\filesystem\operations.hpp"
-#include "boost\pool\pool_alloc.hpp"
+#include "boost/filesystem/path.hpp"
+#include "boost/filesystem/operations.hpp"
+#include "boost/pool/pool_alloc.hpp"
 #include <ostream>
 
 typedef std::basic_string<char, std::char_traits<char>,
