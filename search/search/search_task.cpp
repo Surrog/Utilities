@@ -144,14 +144,16 @@ std::future<sstreampool> search_task::search(
 {
    auto st = boost::filesystem::status(path);
 
-      if (recurcive && boost::filesystem::is_directory(st))
-      {
-         return std::async(std::bind(&search_task::search_directory, this, std::move(path)));
-      }
-      else if (boost::filesystem::is_regular_file(st))
-      {
-         return std::async(std::bind(&search_task::search_file, this, std::move(path)));
-      }
+   if (recurcive && boost::filesystem::is_directory(st))
+   {
+      return std::async(
+          std::bind(&search_task::search_directory, this, std::move(path)));
+   }
+   else if (boost::filesystem::is_regular_file(st))
+   {
+      return std::async(
+          std::bind(&search_task::search_file, this, std::move(path)));
+   }
 
    return std::async([]()
        {
