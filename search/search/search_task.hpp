@@ -79,52 +79,6 @@ struct search_task
       return find(input, value, input_it, value_it);
    }
 
-   template<typename T>
-   void
-      output(const T& value, std::ostream& stream = std::cout)
-   {
-      stream << value;
-      stream.flush();
-   }
-
-   template <typename T>
-   void output(const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
-      std::wostream& stream = std::wcout)
-   {
-      stream << value;
-      stream.flush();
-   }
-
-   template <typename T>
-   void output_line(const T& value, std::ostream& stream = std::cout)
-   {
-      output(value);
-      stream << "\r\n";
-   }
-   
-   template <typename T>
-   void output_line(
-       const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
-       std::wostream& stream = std::wcout)
-   {
-      output(value);
-      stream << L"\r\n";
-   }
-
-   template <typename T>
-   void output(
-      const boost::filesystem::path& input, std::basic_ostream<T>& stream)
-   {
-      output(input.native(), stream);
-   }
-
-   template <typename T>
-   void output_line(
-       const boost::filesystem::path& input, std::basic_ostream<T>& stream)
-   {
-      output_line(input.native(), stream);
-   }
-
    bool has_extension(const boost::filesystem::path& path)
    {
       return has_extension(path.native());

@@ -34,13 +34,13 @@ struct Input
 {
    boost::filesystem::path root = boost::filesystem::current_path();
 
-   std::wstring regex;
+   string_std regex;
    bool recursive = false;
    bool content = false;
    bool filename = false;
    bool directoryName = false;
 
-   std::wstring filterEx;
+   string_std filterEx;
    bool filterfilename = false;
    bool filterfilecontent = false;
    bool filterdirectoryName = false;
@@ -50,5 +50,51 @@ struct Output
 {
    std::mutex coutLock;
 };
+
+template<typename T>
+   void
+      output(const T& value, std::ostream& stream = std::cout)
+   {
+      stream << value;
+      stream.flush();
+   }
+
+   template <typename T>
+   void output(const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
+      std::wostream& stream = std::wcout)
+   {
+      stream << value;
+      stream.flush();
+   }
+
+   template <typename T>
+   void output_line(const T& value, std::ostream& stream = std::cout)
+   {
+      output(value);
+      stream << "\r\n";
+   }
+
+   template <typename T>
+   void output_line(
+       const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
+       std::wostream& stream = std::wcout)
+   {
+      output(value);
+      stream << L"\r\n";
+   }
+
+   template <typename T>
+   void output(
+      const boost::filesystem::path& input, std::basic_ostream<T>& stream)
+   {
+      output(input.native(), stream);
+   }
+
+   template <typename T>
+   void output_line(
+       const boost::filesystem::path& input, std::basic_ostream<T>& stream)
+   {
+      output_line(input.native(), stream);
+   }
 
 #endif //! INPUT_OUTPUT_HPP
