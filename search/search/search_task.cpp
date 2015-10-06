@@ -15,7 +15,7 @@ search_task::search_task(const Input& input)
 void search_task::do_search()
 {
    auto result = search(_input.root, true);
-   output_line(result.get().str());
+   output(result.get().str());
 }
 
 const Output& search_task::getOutput() { return _output; }
@@ -32,7 +32,7 @@ search_task::search_content(const boost::filesystem::path& path) const
 
       stream.sync_with_stdio(false); // allow threaded input
 
-      string_pool buffer;
+      plain_string_pool buffer;
       buffer.reserve(128);
       int line = 0;
 
@@ -133,7 +133,7 @@ sstreampool search_task::search_directory(const boost::filesystem::path& path)
    std::unique_lock<std::mutex> g(_output.coutLock, std::defer_lock);
    if (g.try_lock())
    {
-      output_line(result.str());
+      output(result.str());
       return sstreampool();
    }
    return result;

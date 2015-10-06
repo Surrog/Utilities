@@ -13,7 +13,7 @@
 
 #ifdef _MSC_VER
 typedef std::wstring string_std;
-typedef std::basic_string<wchat_t, std::char_traits<wchar_t>,
+typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
     boost::pool_allocator<wchar_t> > string_pool;
 typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
     boost::pool_allocator<wchar_t> > sstreampool;
@@ -24,6 +24,9 @@ typedef std::basic_string<char, std::char_traits<char>,
 typedef std::basic_stringstream<char, std::char_traits<char>,
     boost::pool_allocator<char> > sstreampool;
 #endif
+
+typedef std::basic_string<char, std::char_traits<char>,
+   boost::pool_allocator<char> > plain_string_pool;
 
 typedef std::pair<string_pool, int> pair_stringpool_int;
 
