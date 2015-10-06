@@ -1,7 +1,7 @@
 
 CC=clang-3.5
-CFLAGS=-std=c++11 -g3 -stdlib=libc++ -I../../../boost 
-LDFLAGS=-std=c++11 -stdlib=libc++ -L../../../boost/stage/lib -lboost_filesystem -lboost_system -lc++ -lpthread
+CFLAGS=-std=c++11 -g3 -stdlib=libc++
+LDFLAGS=-std=c++11 -lboost_filesystem -lboost_system -lpthread -lc++
 SOURCES=main.cpp search_task.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=xsearch
