@@ -22,17 +22,17 @@ struct search_task
 
    const Output& getOutput();
 
-   wsstreampool search_file(const boost::filesystem::path& path);
+   sstreampool search_file(const boost::filesystem::path& path);
 
-   wsstreampool match_directory(const boost::filesystem::path& path);
+   sstreampool match_directory(const boost::filesystem::path& path);
 
-   wsstreampool search_directory(const boost::filesystem::path& path);
+   sstreampool search_directory(const boost::filesystem::path& path);
 
-   std::future<wsstreampool> search(
+   std::future<sstreampool> search(
        boost::filesystem::path path, bool recurcive);
 
-   std::vector<pair_wstringpool_int,
-       boost::pool_allocator<pair_wstringpool_int> >
+   std::vector<pair_stringpool_int,
+       boost::pool_allocator<pair_stringpool_int> >
    search_content(const boost::filesystem::path& path) const;
 
    template <typename T, typename Y>

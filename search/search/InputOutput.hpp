@@ -11,16 +11,21 @@
 #include "boost/pool/pool_alloc.hpp"
 #include <ostream>
 
+#ifdef _MSC_VER
+typedef std::wstring string_std;
+typedef std::basic_string<wchat_t, std::char_traits<wchar_t>,
+    boost::pool_allocator<wchar_t> > string_pool;
+typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
+    boost::pool_allocator<wchar_t> > sstreampool;
+#else
+typedef std::string string_std;
 typedef std::basic_string<char, std::char_traits<char>,
     boost::pool_allocator<char> > string_pool;
+typedef std::basic_stringstream<char, std::char_traits<char>,
+    boost::pool_allocator<char> > sstreampool;
+#endif
+
 typedef std::pair<string_pool, int> pair_stringpool_int;
-
-typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
-    boost::pool_allocator<wchar_t> > wstring_pool;
-typedef std::pair<wstring_pool, int> pair_wstringpool_int;
-
-typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
-    boost::pool_allocator<wchar_t> > wsstreampool;
 
 struct Input
 {

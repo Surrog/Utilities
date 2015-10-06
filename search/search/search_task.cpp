@@ -15,17 +15,16 @@ search_task::search_task(const Input& input)
 void search_task::do_search()
 {
    auto result = search(_input.root, true);
-   std::wcout << result.get().str();
-   std::wcout.flush();
+   output_line(result.get().str());
 }
 
 const Output& search_task::getOutput() { return _output; }
 
-std::vector<pair_wstringpool_int, boost::pool_allocator<pair_wstringpool_int> >
+std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
 search_task::search_content(const boost::filesystem::path& path) const
 {
-   std::vector<pair_wstringpool_int,
-       boost::pool_allocator<pair_wstringpool_int> > result;
+   std::vector<pair_stringpool_int,
+       boost::pool_allocator<pair_stringpool_int> > result;
    std::ifstream stream(path.c_str());
    bool filter_found = !_input.filterfilecontent;
    if (stream.good())
@@ -47,21 +46,21 @@ search_task::search_content(const boost::filesystem::path& path) const
          {
             int size = buffer.size();
             result.push_back(std::make_pair(
-                wstring_pool(buffer.begin(), buffer.end()), line));
+                string_pool(buffer.begin(), buffer.end()), line));
             buffer.reserve(size);
          }
          line++;
       }
    }
    if (!filter_found)
-      return std::vector<pair_wstringpool_int,
-          boost::pool_allocator<pair_wstringpool_int> >();
+      return std::vector<pair_stringpool_int,
+          boost::pool_allocator<pair_stringpool_int> >();
    return result;
 }
 
-wsstreampool search_task::search_file(const boost::filesystem::path& path)
+sstreampool search_task::search_file(const boost::filesystem::path& path)
 {
-   wsstreampool result;
+   sstreampool result;
    if (_input.filterdirectoryName
        && !find(path.parent_path().native(), _input.filterEx))
       return result;
@@ -69,9 +68,8 @@ wsstreampool search_task::search_file(const boost::filesystem::path& path)
    if (_input.filename
        && find(path.filename().native(), _input.regex)) // search on name
    {
-      output_line(path, result);
+     output_line(path.c_str(), result);
    }
-
    if (_input.filterfilename
        && !find(path.leaf().string(), _input.filterEx)) // filter on file name
       return result;
@@ -82,7 +80,7 @@ wsstreampool search_task::search_file(const boost::filesystem::path& path)
       if (content_result.size())
       {
          output_line("\r\n==\r\n", result);
-         output_line(path, result);
+         output_line(path.c_str(), result);
          output_line("==\r\n", result);
 
          for (auto pair : content_result)
@@ -94,9 +92,9 @@ wsstreampool search_task::search_file(const boost::filesystem::path& path)
    return result;
 }
 
-wsstreampool search_task::match_directory(const boost::filesystem::path& path)
+sstreampool search_task::match_directory(const boost::filesystem::path& path)
 {
-   wsstreampool result;
+   sstreampool result;
 
    if (_input.filterdirectoryName
        && !find(path.native(), _input.filterEx)) // filter by path
@@ -104,16 +102,16 @@ wsstreampool search_task::match_directory(const boost::filesystem::path& path)
 
    if (_input.directoryName && find(path.leaf().native(), _input.regex))
    { // check directory name
-      output_line(path, result);
+     output_line(path.c_str(), result);
    }
    return result;
 }
 
-wsstreampool search_task::search_directory(const boost::filesystem::path& path)
+sstreampool search_task::search_directory(const boost::filesystem::path& path)
 {
-   wsstreampool result = match_directory(path);
+   sstreampool result = match_directory(path);
 
-   std::vector<std::future<wsstreampool> > directory_finished; // explore every
+   std::vector<std::future<sstreampool> > directory_finished; // explore every
    // file in it
    boost::system::error_code error;
    auto begin = boost::filesystem::directory_iterator(path, error);
@@ -135,14 +133,13 @@ wsstreampool search_task::search_directory(const boost::filesystem::path& path)
    std::unique_lock<std::mutex> g(_output.coutLock, std::defer_lock);
    if (g.try_lock())
    {
-      std::wcout << result.str();
-      std::wcout.flush();
-      return wsstreampool();
+      output_line(result.str());
+      return sstreampool();
    }
    return result;
 }
 
-std::future<wsstreampool> search_task::search(
+std::future<sstreampool> search_task::search(
     boost::filesystem::path path, bool recurcive)
 {
    auto st = boost::filesystem::status(path);
@@ -158,6 +155,6 @@ std::future<wsstreampool> search_task::search(
 
    return std::async([]()
        {
-          return wsstreampool();
+          return sstreampool();
        });
 }
