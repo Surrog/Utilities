@@ -15,7 +15,7 @@ search_task::search_task(const Input& input)
 void search_task::do_search()
 {
    auto result = search(_input.root, true);
-   output(result.get().str());
+   output(result.get());
 }
 
 const Output& search_task::getOutput() { return _output; }
@@ -58,9 +58,9 @@ search_task::search_content(const boost::filesystem::path& path) const
    return result;
 }
 
-sstreampool search_task::search_file(const boost::filesystem::path& path)
+string_pool search_task::search_file(const boost::filesystem::path& path)
 {
-   sstreampool result;
+   string_pool result;
    if (_input.filterdirectoryName
        && !find(path.parent_path().native(), _input.filterEx))
       return result;
@@ -85,16 +85,21 @@ sstreampool search_task::search_file(const boost::filesystem::path& path)
 
          for (auto pair : content_result)
          {
-            result << "line " << pair.second << " : " << pair.first << "\r\n";
+            output("line ", result);
+            output(pair.second, result);
+            output(" : ", result);
+            output_line(pair.first, result);
+
+            //result << "line " << pair.second << " : " << pair.first << "\r\n";
          }
       }
    }
    return result;
 }
 
-sstreampool search_task::match_directory(const boost::filesystem::path& path)
+string_pool search_task::match_directory(const boost::filesystem::path& path)
 {
-   sstreampool result;
+   string_pool result;
 
    if (_input.filterdirectoryName
        && !find(path.native(), _input.filterEx)) // filter by path
@@ -107,11 +112,11 @@ sstreampool search_task::match_directory(const boost::filesystem::path& path)
    return result;
 }
 
-sstreampool search_task::search_directory(const boost::filesystem::path& path)
+string_pool search_task::search_directory(const boost::filesystem::path& path)
 {
-   sstreampool result = match_directory(path);
+   string_pool result = match_directory(path);
 
-   std::vector<std::future<sstreampool> > directory_finished; // explore every
+   std::vector<std::future<string_pool> > directory_finished; // explore every
    // file in it
    boost::system::error_code error;
    auto begin = boost::filesystem::directory_iterator(path, error);
@@ -127,19 +132,19 @@ sstreampool search_task::search_directory(const boost::filesystem::path& path)
 
       for (auto& future : directory_finished)
       {
-         result << future.get().str();
+         output(future.get(), result);
       }
    }
    std::unique_lock<std::mutex> g(_output.coutLock, std::defer_lock);
    if (g.try_lock())
    {
-      output(result.str());
-      return sstreampool();
+      output(result);
+      return string_pool();
    }
    return result;
 }
 
-std::future<sstreampool> search_task::search(
+std::future<string_pool> search_task::search(
     boost::filesystem::path path, bool recurcive)
 {
    auto st = boost::filesystem::status(path);
@@ -157,6 +162,6 @@ std::future<sstreampool> search_task::search(
 
    return std::async([]()
        {
-          return sstreampool();
+          return string_pool();
        });
 }

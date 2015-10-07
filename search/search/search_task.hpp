@@ -22,13 +22,13 @@ struct search_task
 
    const Output& getOutput();
 
-   sstreampool search_file(const boost::filesystem::path& path);
+   string_pool search_file(const boost::filesystem::path& path);
 
-   sstreampool match_directory(const boost::filesystem::path& path);
+   string_pool match_directory(const boost::filesystem::path& path);
 
-   sstreampool search_directory(const boost::filesystem::path& path);
+   string_pool search_directory(const boost::filesystem::path& path);
 
-   std::future<sstreampool> search(
+   std::future<string_pool> search(
        boost::filesystem::path path, bool recurcive);
 
    std::vector<pair_stringpool_int,

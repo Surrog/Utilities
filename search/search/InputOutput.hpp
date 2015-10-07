@@ -60,6 +60,20 @@ template<typename T>
    }
 
    template <typename T>
+   void output(const T& value, string_pool& stream)
+   {
+      sstreampool sstr;
+      sstr << value;
+      stream += sstr.str();
+   }
+
+   template <typename T>
+   void output(const string_pool& value, string_pool& stream)
+   {
+      stream.append(value.begin(), value.end());
+   }
+
+   template <typename T>
    void output(const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
       std::wostream& stream = std::wcout)
    {
@@ -68,9 +82,33 @@ template<typename T>
    }
 
    template <typename T>
+   struct endl {
+      static T const * const end_line()
+      {
+         return "\r\n";
+      }
+   };
+   
+   template <>
+   struct endl<wchar_t>
+   {
+      static wchar_t const * const end_line()
+      {
+         return L"\r\n";
+      }
+   };
+
+   template <typename T>
+   void output_line(const T& value, string_pool& stream)
+   {
+      output(value, stream);
+      stream += endl<string_pool::value_type>::end_line();
+   }
+
+   template <typename T>
    void output_line(const T& value, std::ostream& stream = std::cout)
    {
-      output(value);
+      output(value, stream);
       stream << "\r\n";
    }
 
@@ -81,6 +119,12 @@ template<typename T>
    {
       output(value);
       stream << L"\r\n";
+   }
+
+   template <typename T>
+   void output(const boost::filesystem::path& input, string_pool& stream)
+   {
+      output(input.native(), stream);
    }
 
    template <typename T>
