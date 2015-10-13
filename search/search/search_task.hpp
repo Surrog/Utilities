@@ -34,10 +34,10 @@ struct search_task
    search_content(const astd::filesystem::path& path) const;
 
    template <typename T, typename Y>
-   static bool find(const T& input, const Y& value, int& input_it, int value_it)
+   static bool find(const T& input, const Y& value, std::size_t& input_it, std::size_t value_it)
    {
-      int input_size = input.size();
-      int value_size = value.size();
+      auto input_size = input.size();
+      auto value_size = value.size();
 
       while (input_it < input_size && value_it < value_size)
       {
@@ -72,8 +72,8 @@ struct search_task
    template <typename T, typename Y>
    static bool find(const T& input, const Y& value)
    {
-      int input_it = 0;
-      int value_it = 0;
+      std::size_t input_it = 0;
+      std::size_t value_it = 0;
       return find(input, value, input_it, value_it);
    }
 

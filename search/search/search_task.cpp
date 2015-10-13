@@ -44,7 +44,7 @@ search_task::search_content(const astd::filesystem::path& path) const
          }
          if (find(buffer, _input.regex))
          {
-            int size = buffer.size();
+            auto size = buffer.size();
             result.push_back(std::make_pair(
                 string_pool(buffer.begin(), buffer.end()), line));
             buffer.reserve(size);

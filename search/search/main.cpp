@@ -4,6 +4,14 @@
 #include "InputOutput.hpp"
 #include "search_task.hpp"
 
+enum class error : int
+{
+   NONE,
+   FILTER_NOT_FOUND,
+   TARGET_NOT_FOUND,
+   SEARCH_VALUE_NOT_FOUND
+};
+
 int main(int argc, char** argv)
 {
    std::cout.sync_with_stdio(false);
@@ -11,9 +19,9 @@ int main(int argc, char** argv)
    Input input;
    input.root = astd::filesystem::current_path();
    string_std regexValue;
-   int result = 0;
+   error result = error::NONE;
 
-   for (int i = 1; i < argc; i++)
+   for (auto i = std::size_t(1); i < std::size_t(argc); i++)
    {
       std::string arg = argv[i];
       if (arg[0] == '-')
@@ -27,7 +35,7 @@ int main(int argc, char** argv)
             if (arg[2] == 'c')
                input.filterfilecontent = true;
             i++;
-            if (i < argc)
+            if (i < std::size_t(argc))
             {
                std::string buffer(argv[i]);
                input.filterEx = string_std(buffer.begin(), buffer.end());
@@ -35,7 +43,7 @@ int main(int argc, char** argv)
             else
             {
                std::cout << "error : filter not found";
-               result = 1;
+               result = error::FILTER_NOT_FOUND;
             }
          }
          else
@@ -53,14 +61,14 @@ int main(int argc, char** argv)
                if (c == 't')
                {
                   i++;
-                  if (i < argc)
+                  if (i < std::size_t(argc))
                   {
                      input.root = argv[i];
                   }
                   else
                   {
                      std::cout << "error : no target chosen" << std::endl;
-                     result = 2;
+                     result = error::TARGET_NOT_FOUND;
                   }
                }
             }
@@ -77,10 +85,10 @@ int main(int argc, char** argv)
       input.filename = true;
    }
 
-   if (!result && !regexValue.size())
+   if (result == error::NONE && !regexValue.size())
    {
       std::cout << "error: no search value" << std::endl;
-      result = 3;
+      result = error::SEARCH_VALUE_NOT_FOUND;
    }
    input.regex = regexValue;
 
@@ -88,14 +96,14 @@ int main(int argc, char** argv)
    {
       std::cout << "error: target doesn't exist" << std::endl;
       std::cout << "target : " << input.root << std::endl;
-      result = 4;
+      result = error::TARGET_NOT_FOUND;
    }
    else
    {
       std::cout << "target: " << input.root << std::endl;
    }
 
-   if (!result)
+   if (result == error::NONE)
    {
       output("search \"");
       output(input.regex);
@@ -141,5 +149,5 @@ int main(int argc, char** argv)
              "file content";
       std::cout.flush();
    }
-   return result;
+   return static_cast<int>(result);
 }
