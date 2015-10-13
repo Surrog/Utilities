@@ -84,16 +84,16 @@ int main(int argc, char** argv)
    }
    input.regex = regexValue;
 
-    if (!boost::filesystem::exists(input.root))
-    {
-        std::cout << "error: target doesn't exist" << std::endl;
-        std::cout << "target : " << input.root << std::endl;
-        result = 4;
-    }
-    else
-    {
-    std::cout << "target: " << input.root << std::endl;
-    }
+   if (!boost::filesystem::exists(input.root))
+   {
+      std::cout << "error: target doesn't exist" << std::endl;
+      std::cout << "target : " << input.root << std::endl;
+      result = 4;
+   }
+   else
+   {
+      std::cout << "target: " << input.root << std::endl;
+   }
 
    if (!result)
    {
@@ -107,11 +107,11 @@ int main(int argc, char** argv)
       std::cout << "file content " << input.content << std::endl;
       if (input.filterfilename || input.filterdirectoryName
           || input.filterfilecontent)
-         {
+      {
          output("filter \"");
          output(input.filterEx);
          output_line("\"");
-         }
+      }
       std::cout << "filter on filename " << input.filterfilename << std::endl;
       std::cout << "filter on directory name " << input.filterdirectoryName
                 << std::endl;

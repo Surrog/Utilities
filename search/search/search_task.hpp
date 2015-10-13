@@ -31,8 +31,7 @@ struct search_task
    std::future<string_pool> search(
        boost::filesystem::path path, bool recurcive);
 
-   std::vector<pair_stringpool_int,
-       boost::pool_allocator<pair_stringpool_int> >
+   std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
    search_content(const boost::filesystem::path& path) const;
 
    template <typename T, typename Y>

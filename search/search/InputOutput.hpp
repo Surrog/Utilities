@@ -26,7 +26,7 @@ typedef std::basic_stringstream<char, std::char_traits<char>,
 #endif
 
 typedef std::basic_string<char, std::char_traits<char>,
-   boost::pool_allocator<char> > plain_string_pool;
+    boost::pool_allocator<char> > plain_string_pool;
 
 typedef std::pair<string_pool, int> pair_stringpool_int;
 
@@ -51,94 +51,83 @@ struct Output
    std::mutex coutLock;
 };
 
-template<typename T>
-   void
-      output(const T& value, std::ostream& stream = std::cout)
-   {
-      stream << value;
-      stream.flush();
-   }
+template <typename T>
+void output(const T& value, std::ostream& stream = std::cout)
+{
+   stream << value;
+   stream.flush();
+}
 
-   template <typename T>
-   void output(const T& value, string_pool& stream)
-   {
-      sstreampool sstr;
-      sstr << value;
-      stream += sstr.str();
-   }
+template <typename T> void output(const T& value, string_pool& stream)
+{
+   sstreampool sstr;
+   sstr << value;
+   stream += sstr.str();
+}
 
-   template <typename T>
-   void output(const string_pool& value, string_pool& stream)
-   {
-      stream.append(value.begin(), value.end());
-   }
+template <typename T> void output(const string_pool& value, string_pool& stream)
+{
+   stream.append(value.begin(), value.end());
+}
 
-   template <typename T>
-   void output(const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
-      std::wostream& stream = std::wcout)
-   {
-      stream << value;
-      stream.flush();
-   }
+template <typename T>
+void output(
+    const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
+    std::wostream& stream = std::wcout)
+{
+   stream << value;
+   stream.flush();
+}
 
-   template <typename T>
-   struct endl {
-      static T const * const end_line()
-      {
-         return "\r\n";
-      }
-   };
-   
-   template <>
-   struct endl<wchar_t>
-   {
-      static wchar_t const * const end_line()
-      {
-         return L"\r\n";
-      }
-   };
+template <typename T> struct endl
+{
+   static T const* const end_line() { return "\r\n"; }
+};
 
-   template <typename T>
-   void output_line(const T& value, string_pool& stream)
-   {
-      output(value, stream);
-      stream += endl<string_pool::value_type>::end_line();
-   }
+template <> struct endl<wchar_t>
+{
+   static wchar_t const* const end_line() { return L"\r\n"; }
+};
 
-   template <typename T>
-   void output_line(const T& value, std::ostream& stream = std::cout)
-   {
-      output(value, stream);
-      stream << "\r\n";
-   }
+template <typename T> void output_line(const T& value, string_pool& stream)
+{
+   output(value, stream);
+   stream += endl<string_pool::value_type>::end_line();
+}
 
-   template <typename T>
-   void output_line(
-       const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
-       std::wostream& stream = std::wcout)
-   {
-      output(value);
-      stream << L"\r\n";
-   }
+template <typename T>
+void output_line(const T& value, std::ostream& stream = std::cout)
+{
+   output(value, stream);
+   stream << "\r\n";
+}
 
-   template <typename T>
-   void output(const boost::filesystem::path& input, string_pool& stream)
-   {
-      output(input.native(), stream);
-   }
+template <typename T>
+void output_line(
+    const std::basic_string<wchar_t, std::char_traits<wchar_t>, T>& value,
+    std::wostream& stream = std::wcout)
+{
+   output(value);
+   stream << L"\r\n";
+}
 
-   template <typename T>
-   void output(
-      const boost::filesystem::path& input, std::basic_ostream<T>& stream)
-   {
-      output(input.native(), stream);
-   }
+template <typename T>
+void output(const boost::filesystem::path& input, string_pool& stream)
+{
+   output(input.native(), stream);
+}
 
-   template <typename T>
-   void output_line(
-       const boost::filesystem::path& input, std::basic_ostream<T>& stream)
-   {
-      output_line(input.native(), stream);
-   }
+template <typename T>
+void output(const boost::filesystem::path& input, std::basic_ostream<T>& stream)
+{
+   output(input.native(), stream);
+}
+
+template <typename T>
+void output_line(
+    const boost::filesystem::path& input, std::basic_ostream<T>& stream)
+{
+   output_line(input.native(), stream);
+}
 
 #endif //! INPUT_OUTPUT_HPP

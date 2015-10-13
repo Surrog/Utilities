@@ -23,8 +23,8 @@ const Output& search_task::getOutput() { return _output; }
 std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
 search_task::search_content(const boost::filesystem::path& path) const
 {
-   std::vector<pair_stringpool_int,
-       boost::pool_allocator<pair_stringpool_int> > result;
+   std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
+       result;
    std::ifstream stream(path.c_str());
    bool filter_found = !_input.filterfilecontent;
    if (stream.good())
@@ -68,7 +68,7 @@ string_pool search_task::search_file(const boost::filesystem::path& path)
    if (_input.filename
        && find(path.filename().native(), _input.regex)) // search on name
    {
-     output_line(path.c_str(), result);
+      output_line(path.c_str(), result);
    }
    if (_input.filterfilename
        && !find(path.leaf().string(), _input.filterEx)) // filter on file name
@@ -90,7 +90,8 @@ string_pool search_task::search_file(const boost::filesystem::path& path)
             output(" : ", result);
             output_line(pair.first, result);
 
-            //result << "line " << pair.second << " : " << pair.first << "\r\n";
+            // result << "line " << pair.second << " : " << pair.first <<
+            // "\r\n";
          }
       }
    }
@@ -107,7 +108,7 @@ string_pool search_task::match_directory(const boost::filesystem::path& path)
 
    if (_input.directoryName && find(path.leaf().native(), _input.regex))
    { // check directory name
-     output_line(path.c_str(), result);
+      output_line(path.c_str(), result);
    }
    return result;
 }
