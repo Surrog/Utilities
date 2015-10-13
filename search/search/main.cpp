@@ -9,7 +9,7 @@ int main(int argc, char** argv)
    std::cout.sync_with_stdio(false);
    std::wcout.sync_with_stdio(false);
    Input input;
-   input.root = boost::filesystem::current_path();
+   input.root = astd::filesystem::current_path();
    string_std regexValue;
    int result = 0;
 
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
    }
    input.regex = regexValue;
 
-   if (!boost::filesystem::exists(input.root))
+   if (!astd::filesystem::exists(input.root))
    {
       std::cout << "error: target doesn't exist" << std::endl;
       std::cout << "target : " << input.root << std::endl;

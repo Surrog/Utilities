@@ -2,8 +2,7 @@
 #define SEARCH_TASK_HPP
 
 #include "InputOutput.hpp"
-#include "boost/filesystem/path.hpp"
-#include "boost/filesystem/operations.hpp"
+#include "afilesystem.hpp"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <future>
@@ -22,17 +21,17 @@ struct search_task
 
    const Output& getOutput();
 
-   string_pool search_file(const boost::filesystem::path& path);
+   string_pool search_file(const astd::filesystem::path& path);
 
-   string_pool match_directory(const boost::filesystem::path& path);
+   string_pool match_directory(const astd::filesystem::path& path);
 
-   string_pool search_directory(const boost::filesystem::path& path);
+   string_pool search_directory(const astd::filesystem::path& path);
 
    std::future<string_pool> search(
-       boost::filesystem::path path, bool recurcive);
+      astd::filesystem::path path, bool recurcive);
 
    std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
-   search_content(const boost::filesystem::path& path) const;
+   search_content(const astd::filesystem::path& path) const;
 
    template <typename T, typename Y>
    static bool find(const T& input, const Y& value, int& input_it, int value_it)
@@ -78,7 +77,7 @@ struct search_task
       return find(input, value, input_it, value_it);
    }
 
-   bool has_extension(const boost::filesystem::path& path)
+   bool has_extension(const astd::filesystem::path& path)
    {
       return has_extension(path.native());
    }

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include "search_task.hpp"
-#include "boost/filesystem/operations.hpp"
+#include "afilesystem.hpp"
 #include <functional>
 
 search_task::search_task(const Input& input)
@@ -21,7 +21,7 @@ void search_task::do_search()
 const Output& search_task::getOutput() { return _output; }
 
 std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
-search_task::search_content(const boost::filesystem::path& path) const
+search_task::search_content(const astd::filesystem::path& path) const
 {
    std::vector<pair_stringpool_int, boost::pool_allocator<pair_stringpool_int> >
        result;
@@ -58,7 +58,7 @@ search_task::search_content(const boost::filesystem::path& path) const
    return result;
 }
 
-string_pool search_task::search_file(const boost::filesystem::path& path)
+string_pool search_task::search_file(const astd::filesystem::path& path)
 {
    string_pool result;
    if (_input.filterdirectoryName
@@ -70,8 +70,9 @@ string_pool search_task::search_file(const boost::filesystem::path& path)
    {
       output_line(path.c_str(), result);
    }
+
    if (_input.filterfilename
-       && !find(path.leaf().string(), _input.filterEx)) // filter on file name
+       && !find(path.filename().string(), _input.filterEx)) // filter on file name
       return result;
 
    if (_input.content) // search in content
@@ -98,7 +99,7 @@ string_pool search_task::search_file(const boost::filesystem::path& path)
    return result;
 }
 
-string_pool search_task::match_directory(const boost::filesystem::path& path)
+string_pool search_task::match_directory(const astd::filesystem::path& path)
 {
    string_pool result;
 
@@ -106,26 +107,26 @@ string_pool search_task::match_directory(const boost::filesystem::path& path)
        && !find(path.native(), _input.filterEx)) // filter by path
       return result;
 
-   if (_input.directoryName && find(path.leaf().native(), _input.regex))
+   if (_input.directoryName && find(path.filename().native(), _input.regex))
    { // check directory name
       output_line(path.c_str(), result);
    }
    return result;
 }
 
-string_pool search_task::search_directory(const boost::filesystem::path& path)
+string_pool search_task::search_directory(const astd::filesystem::path& path)
 {
    string_pool result = match_directory(path);
 
    std::vector<std::future<string_pool> > directory_finished; // explore every
    // file in it
-   boost::system::error_code error;
-   auto begin = boost::filesystem::directory_iterator(path, error);
-   auto end = boost::filesystem::directory_iterator();
+   astd::filesystem::error_code error;
+   auto begin = astd::filesystem::directory_iterator(path, error);
+   auto end = astd::filesystem::directory_iterator();
    if (!error)
    {
       std::for_each(begin, end,
-          [this, &directory_finished](const boost::filesystem::path& subpath)
+          [this, &directory_finished](const astd::filesystem::path& subpath)
           {
              directory_finished.push_back(
                  search(std::move(subpath), _input.recursive));
@@ -146,16 +147,16 @@ string_pool search_task::search_directory(const boost::filesystem::path& path)
 }
 
 std::future<string_pool> search_task::search(
-    boost::filesystem::path path, bool recurcive)
+   astd::filesystem::path path, bool recurcive)
 {
-   auto st = boost::filesystem::status(path);
+   auto st = astd::filesystem::status(path);
 
-   if (recurcive && boost::filesystem::is_directory(st))
+   if (recurcive && astd::filesystem::is_directory(st))
    {
       return std::async(std::launch::deferred,
           std::bind(&search_task::search_directory, this, std::move(path)));
    }
-   else if (boost::filesystem::is_regular_file(st))
+   else if (astd::filesystem::is_regular_file(st))
    {
       return std::async(std::launch::deferred,
           std::bind(&search_task::search_file, this, std::move(path)));

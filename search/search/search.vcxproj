@@ -141,6 +141,7 @@
     <ClCompile Include="search_task.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="afilesystem.hpp" />
     <ClInclude Include="InputOutput.hpp" />
     <ClInclude Include="search_task.hpp" />
   </ItemGroup>

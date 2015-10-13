@@ -6,8 +6,7 @@
 #include <mutex>
 #include <vector>
 #include <utility>
-#include "boost/filesystem/path.hpp"
-#include "boost/filesystem/operations.hpp"
+#include "afilesystem.hpp"
 #include "boost/pool/pool_alloc.hpp"
 #include <ostream>
 
@@ -32,7 +31,7 @@ typedef std::pair<string_pool, int> pair_stringpool_int;
 
 struct Input
 {
-   boost::filesystem::path root = boost::filesystem::current_path();
+   astd::filesystem::path root = astd::filesystem::current_path();
 
    string_std regex;
    bool recursive = false;
@@ -112,20 +111,20 @@ void output_line(
 }
 
 template <typename T>
-void output(const boost::filesystem::path& input, string_pool& stream)
+void output(const astd::filesystem::path& input, string_pool& stream)
 {
    output(input.native(), stream);
 }
 
 template <typename T>
-void output(const boost::filesystem::path& input, std::basic_ostream<T>& stream)
+void output(const astd::filesystem::path& input, std::basic_ostream<T>& stream)
 {
    output(input.native(), stream);
 }
 
 template <typename T>
 void output_line(
-    const boost::filesystem::path& input, std::basic_ostream<T>& stream)
+    const astd::filesystem::path& input, std::basic_ostream<T>& stream)
 {
    output_line(input.native(), stream);
 }
