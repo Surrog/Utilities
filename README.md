@@ -14,7 +14,9 @@ Allow a quick query on different criteria, using basic wildcard :
 	-f [nd] followed by a pattern: will filter by directory or filter the name where the content is searched.
 
 output: full path of each files on single line in the standard output.
+
 example:
+
 	D:\Projet\Github\fast_search\search>xsearch -rn *obj -fd *Debug*
 	target: D:\Projet\Github\fast_search\search
 	search "*obj"
