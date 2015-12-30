@@ -40,6 +40,8 @@ struct Input
 {
    astd::filesystem::path root = astd::filesystem::current_path();
 
+   bool clean_output = false;
+
    string_std regex;
    bool recursive = false;
    bool content = false;

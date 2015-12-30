@@ -24,6 +24,10 @@ int main(int argc, char** argv)
    for (auto i = std::size_t(1); i < std::size_t(argc); i++)
    {
       std::string arg = argv[i];
+      if (arg == "--clean")
+      {
+         input.clean_output = true;
+      }
       if (arg[0] == '-')
       {
          if (arg[1] == 'f')
@@ -98,47 +102,56 @@ int main(int argc, char** argv)
       std::cout << "target : " << input.root << std::endl;
       result = error::TARGET_NOT_FOUND;
    }
-   else
+   else if (!input.clean_output)
    {
       std::cout << "target: " << input.root << std::endl;
    }
 
    if (result == error::NONE)
    {
-      output("search \"");
-      output(input.regex);
-      output_line("\"");
-      std::cout << "target " << input.root << std::endl;
-      std::cout << "recursive " << input.recursive << std::endl;
-      std::cout << "filename " << input.filename << std::endl;
-      std::cout << "directory name " << input.directoryName << std::endl;
-      std::cout << "file content " << input.content << std::endl;
-      if (input.filterfilename || input.filterdirectoryName
-          || input.filterfilecontent)
+      if (!input.clean_output)
       {
-         output("filter \"");
-         output(input.filterEx);
+         output("search \"");
+         output(input.regex);
          output_line("\"");
+         std::cout << "target " << input.root << std::endl;
+         std::cout << "recursive " << input.recursive << std::endl;
+         std::cout << "filename " << input.filename << std::endl;
+         std::cout << "directory name " << input.directoryName << std::endl;
+         std::cout << "file content " << input.content << std::endl;
+         if (input.filterfilename || input.filterdirectoryName
+            || input.filterfilecontent)
+         {
+            output("filter \"");
+            output(input.filterEx);
+            output_line("\"");
+         }
+         std::cout << "filter on filename " << input.filterfilename << std::endl;
+         std::cout << "filter on directory name " << input.filterdirectoryName
+            << std::endl;
+         std::cout << "filter on file content " << input.filterfilecontent
+            << std::endl;
+         std::cout << std::endl;
       }
-      std::cout << "filter on filename " << input.filterfilename << std::endl;
-      std::cout << "filter on directory name " << input.filterdirectoryName
-                << std::endl;
-      std::cout << "filter on file content " << input.filterfilecontent
-                << std::endl;
-      std::cout << std::endl;
+
       auto start = std::chrono::system_clock::now();
       search_task task(input);
       task.do_search();
-      std::cout << "execution time: "
-                << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       std::chrono::system_clock::now() - start)
-                       .count()
-                << " ms" << std::endl;
+
+      if (!input.clean_output)
+      {
+         std::cout << "execution time: "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::system_clock::now() - start)
+            .count()
+            << " ms" << std::endl;
+      }
    }
    else
    {
       std::cout
-          << "search [-rcnd] [-t root_path] [-f[nd] filter_regex] regex\r\n"
+          << "search [--clean] [-rcnd] [-t root_path] [-f[nd] filter_regex] regex\r\n"
+             "--clean remove search detail and performance time\r\n"
              "-n search in filename\r\n"
              "-c search in file content\r\n"
              "-d search in directory name\t\n"
