@@ -11,21 +11,28 @@
 #include <ostream>
 
 #ifdef _MSC_VER
-typedef std::wstring string_std;
-typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
-    boost::pool_allocator<wchar_t> > string_pool;
-typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
-    boost::pool_allocator<wchar_t> > sstreampool;
+typedef wchar_t char_std;
 #else
-typedef std::string string_std;
-typedef std::basic_string<char, std::char_traits<char>,
-    boost::pool_allocator<char> > string_pool;
-typedef std::basic_stringstream<char, std::char_traits<char>,
-    boost::pool_allocator<char> > sstreampool;
+typedef char char_std;
 #endif
 
-typedef std::basic_string<char, std::char_traits<char>,
-    boost::pool_allocator<char> > plain_string_pool;
+typedef boost::pool_allocator<char_std,
+    boost::default_user_allocator_new_delete, std::mutex, 32U,
+    0U> char_std_pool;
+
+typedef boost::pool_allocator<char, boost::default_user_allocator_new_delete,
+   std::mutex, 32U, 0U> char_pool;
+
+typedef std::basic_string<char_std, std::char_traits<char_std> > string_std;
+
+typedef std::basic_string<char_std, std::char_traits<char_std>, char_std_pool>
+    string_pool;
+
+typedef std::basic_stringstream<char_std, std::char_traits<char_std>,
+    char_std_pool> sstreampool;
+
+typedef std::basic_string<char, std::char_traits<char>, char_pool>
+    plain_string_pool;
 
 typedef std::pair<string_pool, int> pair_stringpool_int;
 
