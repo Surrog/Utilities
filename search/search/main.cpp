@@ -27,7 +27,7 @@ int main(int argc, char** argv)
       if (arg == "--clean")
       {
          input.clean_output = true;
-      }
+      } else
       if (arg[0] == '-')
       {
          if (arg[1] == 'f')
