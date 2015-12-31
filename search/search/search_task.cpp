@@ -36,13 +36,16 @@ search_task::search_content(const astd::filesystem::path& path) const
       buffer.reserve(128);
       int line = 0;
 
+      static auto filterEx_pattern = setup_pattern(_input.filterEx);
+      static auto regex_pattern = setup_pattern(_input.regex);
+
       while (std::getline(stream, buffer))
       {
-         if (!filter_found && find(buffer, _input.filterEx))
+         if (!filter_found && find_Ex(buffer, filterEx_pattern))
          {
             filter_found = true;
          }
-         if (find(buffer, _input.regex))
+         if (find_Ex(buffer, regex_pattern))
          {
             auto size = buffer.size();
             result.push_back(std::make_pair(
@@ -65,14 +68,17 @@ string_pool search_task::search_file(const astd::filesystem::path& path)
        && !find(path.parent_path().native(), _input.filterEx))
       return result;
 
+   static auto filterEx_pattern = setup_pattern(_input.filterEx);
+   static auto regex_pattern = setup_pattern(_input.regex);
+
    if (_input.filename
-       && find(path.filename().native(), _input.regex)) // search on name
+       && find_Ex(filename(path), regex_pattern)) // search on name
    {
       output_line(path.c_str(), result);
    }
 
    if (_input.filterfilename
-       && !find(path.filename().string(), _input.filterEx)) // filter on file name
+       && !find_Ex(filename(path), filterEx_pattern)) // filter on file name
       return result;
 
    if (_input.content) // search in content
@@ -103,11 +109,14 @@ string_pool search_task::match_directory(const astd::filesystem::path& path)
 {
    string_pool result;
 
+   static auto filterEx_pattern = setup_pattern(_input.filterEx);
+   static auto regex_pattern = setup_pattern(_input.regex);
+
    if (_input.filterdirectoryName
-       && !find(path.native(), _input.filterEx)) // filter by path
+       && !find_Ex(path.native(), filterEx_pattern)) // filter by path
       return result;
 
-   if (_input.directoryName && find(path.filename().native(), _input.regex))
+   if (_input.directoryName && find_Ex(filename(path), regex_pattern))
    { // check directory name
       output_line(path.c_str(), result);
    }
