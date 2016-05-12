@@ -1,0 +1,3 @@
+[submodule "xtsslib"]
+	path = xtsslib
+	url = https://github.com/Surogate/xtsslib.git
