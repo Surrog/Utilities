@@ -47,7 +47,7 @@ basic_rm
 
 Allowed options:
 
-	--help		produce help message
+	--help	produce help message
 	--f		ignore nonexistent files, never prompt
 	--i		prompt before every removal
 	--I		prompt only once. Less intrusive than - i, while still
@@ -62,7 +62,7 @@ Display files or directories content.
 
 Allowed options:
 
-	--help  produce help message
+	--help	produce help message
 	--t     keep reading the file to display new write
 	--i     will recursively display the content of all directory
 	--n    	display the line number while reading the file
@@ -73,8 +73,8 @@ netcat
 ==========
 Allowed options:
 
-	--help                	produce help message
-	-l 			set the program to listen
+	--help	produce help message
+	-l		set the program to listen
 	<destination><port>	set the program to connect to this address
 
 clean_twin
