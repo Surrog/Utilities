@@ -46,36 +46,40 @@ basic_rm
 ==========
 
 Allowed options:
-  --help                produce help message
-  --f                   ignore nonexistent files, never prompt
-  --i                   prompt before every removal
-  --I                   prompt only once. Less intrusive than - i, while still
-                        giving protection against most mistakes
-  --r                   remove directories and their contents recursively
-  --v                   explain what is being done
-  --path arg            path to element being remove
+
+	--help		produce help message
+	--f		ignore nonexistent files, never prompt
+	--i		prompt before every removal
+	--I		prompt only once. Less intrusive than - i, while still
+			giving protection against most mistakes
+	--r		remove directories and their contents recursively
+  	--v		explain what is being done
+  	--path <arg>	path to element being remove
 
 xcat
 ==========
 Display files or directories content.
 
 Allowed options:
-  --help                produce help message
-  --t                   keep reading the file to display new write
-  --i                   will recursively display the content of all directory
-  --n                   display the line number while reading the file
-                        giving protection against most mistakes
-  --path                path to display (implicit)
+
+	--help  produce help message
+	--t     keep reading the file to display new write
+	--i     will recursively display the content of all directory
+	--n    	display the line number while reading the file
+                giving protection against most mistakes
+	--path  path to display (implicit)
 
 netcat
 ==========
 Allowed options:
-  --help                produce help message
-  -l 			set the program to listen
-  <destination><port>	set the program to connect to this address
+
+	--help                	produce help message
+	-l 			set the program to listen
+	<destination><port>	set the program to connect to this address
 
 clean_twin
 ==========
 
 Allowed options:
-  <path>		directory path to clean
+
+	<path>		directory path to clean
