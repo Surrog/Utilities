@@ -39,3 +39,18 @@ example:
 	D:\Projet\Github\fast_search\search\search\Debug Large Test\main.obj
 	D:\Projet\Github\fast_search\search\search\Debug Large Test\search_task.obj
 	execution time: 8 ms
+	
+	
+
+basic_rm
+==========
+
+Basic multiplateform rm implementation
+
+basic_netcat
+==========
+
+Basic multiplateform cat and netcat implementation
+
+
+
