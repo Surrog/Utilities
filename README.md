@@ -1,5 +1,8 @@
-fast_search
+Utilities
 ===========
+
+fast_search
+==========
 
 fast search across files, directory and content
 
