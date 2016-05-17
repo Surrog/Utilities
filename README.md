@@ -42,7 +42,7 @@ example:
 	
 	
 
-basic_rm
+xrm
 ==========
 
 Allowed options:
