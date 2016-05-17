@@ -26,8 +26,9 @@ std::pair<bool, input> parse_input(
    auto path = vm.find("path");
    if(path != vm.end())
    {
+      auto path_string = path->second.as<std::string>();
       result.second.input_path
-          = path->second.as<decltype(result.second.input_path)>();
+          = astd::filesystem::path(path_string);
       result.first = astd::filesystem::exists(result.second.input_path);
       if(!result.first)
          std::cerr << result.second.input_path << " doesn't exist" << std::endl;
@@ -154,7 +155,7 @@ int main(int argc, char** argv)
        "ing protection against most mistakes")(
        "r", "remove directories and their contents recursively")(
        "v", "explain what is being done")("path",
-       boost::program_options::value<astd::filesystem::path>(),
+       boost::program_options::value<std::string>(),
        "path to element being remove");
 
    boost::program_options::positional_options_description p;
